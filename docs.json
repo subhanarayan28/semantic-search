@@ -1,0 +1,10 @@
+[
+  {"id": 0, "content": "To authenticate a user, send a POST request to /login with username and password.", "source": "auth.md"},
+  {"id": 1, "content": "API keys must be included in the Authorization header using Bearer token.", "source": "api_keys.md"},
+  {"id": 2, "content": "Refresh tokens can be used to obtain a new access token without logging in again.", "source": "tokens.md"},
+  {"id": 3, "content": "Password reset is done using /reset-password endpoint and email verification.", "source": "passwords.md"},
+  {"id": 4, "content": "OAuth2 authentication flow requires client id and client secret.", "source": "oauth.md"},
+  {"id": 5, "content": "Use HTTPS for all API requests to ensure encrypted communication.", "source": "security.md"},
+  {"id": 6, "content": "Rate limiting prevents abuse by restricting number of API calls per minute.", "source": "rate_limit.md"},
+  {"id": 7, "content": "Pagination can be implemented using limit and offset query parameters.", "source": "pagination.md"}
+]
