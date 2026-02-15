@@ -1,19 +1,25 @@
-from sentence_transformers import CrossEncoder
-
-# Cross encoder model (true re-ranking)
-model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+import numpy as np
+from embedder import embed_text
 
 def rerank(query, docs, top_k=3):
     if not docs:
         return []
 
-    pairs = [(query, d["content"]) for d in docs]
+    # embed query again (second scoring stage)
+    query_vec = np.array(embed_text([query])[0])
 
-    scores = model.predict(pairs)
+    rescored = []
+    for d in docs:
+        doc_vec = np.array(embed_text([d["content"]])[0])
 
-    for i, score in enumerate(scores):
-        # normalize score to 0–1
-        docs[i]["score"] = float(1 / (1 + pow(2.71828, -score)))
+        # cosine similarity
+        score = np.dot(query_vec, doc_vec) / (
+            np.linalg.norm(query_vec) * np.linalg.norm(doc_vec)
+        )
 
-    docs.sort(key=lambda x: x["score"], reverse=True)
-    return docs[:top_k]
+        # normalize 0–1
+        d["score"] = float((score + 1) / 2)
+        rescored.append(d)
+
+    rescored.sort(key=lambda x: x["score"], reverse=True)
+    return rescored[:top_k]

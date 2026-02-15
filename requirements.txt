@@ -4,4 +4,3 @@ numpy
 scikit-learn
 faiss-cpu
 sentence-transformers
-torch
