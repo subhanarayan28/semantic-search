@@ -8,8 +8,7 @@ app = FastAPI()
 
 store = VectorStore()
 store.load_docs()
-store.build_index()
-
+index_ready = False
 class QueryRequest(BaseModel):
     query: str
     k: int = 5
@@ -18,7 +17,14 @@ class QueryRequest(BaseModel):
 
 @app.post("/search")
 def search(req: QueryRequest):
+    global index_ready
+
     start = time.time()
+
+    # build index only on first request
+    if not index_ready:
+        store.build_index()
+        index_ready = True
 
     initial = store.search(req.query, req.k)
 
